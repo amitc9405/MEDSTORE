@@ -1,0 +1,33 @@
+.cnavbar-a{
+   display:inline;
+}
+
+.bg-color-element{
+   background-color: #150050 !important;
+}
+
+.color-element{
+   color: #150050 !important;
+}
+
+.subcategory-heading{
+   font-size: larger;
+   margin-left: 6vw;
+   margin-bottom: 0;
+   padding-top: 6vh;
+   padding-bottom: 1vh;
+}
+
+.footer-display{
+   display: flex;
+
+}
+
+.card-custom{
+   padding: 4vh 8vw 9vh 8vw !important;
+}
+
+.carousel-control-next,
+.carousel-control-prev, .img-color-inversion /*, .carousel-indicators */ {
+    filter: invert(100%);
+}
