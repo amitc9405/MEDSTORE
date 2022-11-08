@@ -8,8 +8,8 @@ public class Customer {
     private int idcustomer;
     private String username;
     private String customer_sex;
-    private String customer_ph_no;
     private String customer_aadhar_no;
+    private String customer_ph_no;
     private String customer_state;
     private String customer_street;
     private String customer_city;
@@ -17,10 +17,11 @@ public class Customer {
     private String customer_house_no;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date customer_dob;
+    private int customer_userid;
     
     public Customer(String username, String customer_sex, String customer_ph_no,
             String customer_aadhar_no, String customer_state, String customer_street, String customer_city,
-            int customer_pincode, String customer_house_no, Date customer_dob) {
+            int customer_pincode, String customer_house_no, Date customer_dob,int id) {
         this.username = username;
         this.customer_sex = customer_sex;
         this.customer_ph_no = customer_ph_no;
@@ -31,6 +32,7 @@ public class Customer {
         this.customer_pincode = customer_pincode;
         this.customer_house_no = customer_house_no;
         this.customer_dob = customer_dob;
+        this.customer_userid=id;
     }
 
     public Customer() {
@@ -102,6 +104,14 @@ public class Customer {
     }
     public void setCustomer_house_no(String customer_house_no) {
         this.customer_house_no = customer_house_no;
+    }
+
+    public int getCustomer_userid() {
+        return customer_userid;
+    }
+
+    public void setCustomer_userid(int customer_userid) {
+        this.customer_userid = customer_userid;
     }
     
 }

@@ -5,16 +5,15 @@ import org.springframework.data.annotation.Id;
 
 public class users {
     @Id
-    private String username;
     private int user_id;
+    private String username;
     private String email;
     private String password;
     private String role;
     private int enabled;
     
-    public users(String username, int user_id, String email, String password, String role, int enabled) {
+    public users(String username, String email, String password, String role, int enabled) {
         this.username = username;
-        this.user_id = user_id;
         this.email = email;
         this.password = password;
         this.role = role;

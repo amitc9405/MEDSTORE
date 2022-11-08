@@ -41,10 +41,12 @@ public class usersServiceImpl implements usersService,UserDetailsService{
     @Override
     public users save(usersRegistrationdto registrationdto) {
         // users user = new users(registrationdto.getUsername(),registrationdto.getPassword(),"ROLE_USER",1);
-        Customer customer = new Customer(registrationdto.getName(),registrationdto.getGender(),registrationdto.getMobile_no(),registrationdto.getAadhar_no(),registrationdto.getState(),registrationdto.getStreet(),registrationdto.getCity(),registrationdto.getPincode(),registrationdto.getHouse_no(),registrationdto.getDob());
-        int id = usersrepository.save_customer(customer);
-        users user = new users(registrationdto.getUsername(),id,registrationdto.getEmail(),passwordEncoder.encode(registrationdto.getPassword()),"ROLE_USER",1);
-        return usersrepository.save(user);
+        users user = new users(registrationdto.getUsername(),registrationdto.getEmail(),passwordEncoder.encode(registrationdto.getPassword()),"ROLE_USER",1);
+        int id = usersrepository.save(user);
+        
+        Customer customer = new Customer(registrationdto.getName(),registrationdto.getGender(),registrationdto.getMobile_no(),registrationdto.getAadhar_no(),registrationdto.getState(),registrationdto.getStreet(),registrationdto.getCity(),registrationdto.getPincode(),registrationdto.getHouse_no(),registrationdto.getDob(),id);
+        usersrepository.save_customer(customer);
+        return user ;
     }
 
     @Override

@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.medicalstore.medicalstore.Service.usersService;
@@ -68,11 +67,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         http.authorizeRequests()
             .antMatchers("/forgotpassword").permitAll()
             .antMatchers("/profile").hasRole("USER")
-            .antMatchers("/success").hasAnyRole("ADMIN","USER")
+            .antMatchers("/success").hasAnyRole("ADMIN","USER","NEWBRO")
+            .antMatchers("/manager").hasAnyRole("MANAGER")
             .antMatchers("/**").permitAll()
             .and()
             .formLogin()
-            .loginPage("/login").permitAll()
+            .loginPage("/login")
+            .defaultSuccessUrl("/default", true).permitAll()
             ;
    }
 

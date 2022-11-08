@@ -18,22 +18,33 @@ public class usersRepositoryimpl implements usersRepository{
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private static final String INSERT_USER_QUERY="INSERT INTO USERS VALUES(?,?,?,?,?,?)";
-    private static final String GET_USER_BY_ID_QUERY="SELECT * FROM USERS WHERE USERNAME=?";
-    private static final String GET_CUSTOMER_BY_USERNAME_QUERY="SELECT * FROM MEDICALSTORE.CUSTOMER WHERE IDCUSTOMER = (SELECT user_id FROM MEDICALSTORE.USERS WHERE USERNAME=?)";
+    private static final String INSERT_USER_QUERY="INSERT INTO USERS(username,password,role,enabled,email) VALUES(?,?,?,?,?)";
+    private static final String GET_USER_BY_USERNAME_QUERY="SELECT * FROM USERS WHERE USERNAME=?";
+    private static final String GET_CUSTOMER_BY_USERNAME_QUERY="SELECT * FROM MEDICALSTORE.CUSTOMER WHERE customer_userid = (SELECT user_id FROM MEDICALSTORE.USERS WHERE USERNAME=?)";
     private static final String UPDATE_CUSTOMER_ADDRESS_QUERY="UPDATE MEDICALSTORE.CUSTOMER SET CUSTOMER_PHN_NO=?,CUSTOMER_HOUSE_NO=?,CUSTOMER_STREET=?,CUSTOMER_CITY=?,CUSTOMER_PINCODE=?,CUSTOMER_STATE=? WHERE IDCUSTOMER=?";
     private static final String USERNAME_EXISTS="SELECT EXISTS(SELECT * FROM USERS WHERE USERNAME=?)";
     private static final String EMAIL_EXTSTS="SELECT EXISTS(SELECT * FROM USERS WHERE EMAIL=?)";
     // private static final String INSERT_CUSTOMER_QUERY="INSERT INTO CUSTOMER VALUES(?,?,?,?,?,?,?,?,?,?)";
-    private static final String INSERT_CUSTOMER_QUERY="INSERT INTO CUSTOMER(customer_name,customer_sex,customer_phn_no,customer_aadhar_no,customer_state,customer_street,customer_city,customer_pincode,customer_house_no,customer_dob) VALUES(?,?,?,?,?,?,?,?,?,?)";
+    private static final String INSERT_CUSTOMER_QUERY="INSERT INTO CUSTOMER(customer_name,customer_sex,customer_phn_no,customer_aadhar_no,customer_state,customer_street,customer_city,customer_pincode,customer_house_no,customer_dob,customer_userid) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
     @Override
-    public users save(users user) {
-        jdbcTemplate.update(INSERT_USER_QUERY,user.getUser_id(),user.getUsername(),user.getPassword(),user.getRole(),user.getEnabled(),user.getEmail());
-        return user;
+    public int save(users user) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(INSERT_USER_QUERY, new String[] { "ID" });
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getRole());
+            ps.setInt(4,user.getEnabled());
+            ps.setString(5,user.getEmail());
+            return ps;
+          }, keyHolder);
+        // jdbcTemplate.update(INSERT_USER_QUERY,user.getUser_id(),user.getUsername(),user.getPassword(),user.getRole(),user.getEnabled(),user.getEmail());
+        return keyHolder.getKey().intValue();
     }
 
     @Override
-    public int save_customer(Customer customer){
+    public void save_customer(Customer customer){
         
         // jdbcTemplate.update(INSERT_CUSTOMER_QUERY,customer.getIdcustomer(),customer.getUsername(),customer.getCustomer_sex(),customer.getCustomer_ph_no(),customer.getCustomer_aadhar_no(),customer.getCustomer_state(),customer.getCustomer_street(),customer.getCustomer_city(),customer.getCustomer_pincode(),customer.getCustomer_house_no());
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -50,15 +61,16 @@ public class usersRepositoryimpl implements usersRepository{
             ps.setInt(8, customer.getCustomer_pincode());
             ps.setString(9, customer.getCustomer_house_no());
             ps.setDate(10, (new java.sql.Date(customer.getCustomer_dob().getTime())));
+            ps.setInt(11,customer.getCustomer_userid());
             return ps;
           }, keyHolder);
-        return keyHolder.getKey().intValue();
+        return;
     }
 
     @Override
     public users findbyEmail(String email) {
         RowMapper<users> rowMapper=new RowMapperImpl();
-        users user = this.jdbcTemplate.queryForObject(GET_USER_BY_ID_QUERY, rowMapper,email);
+        users user = this.jdbcTemplate.queryForObject(GET_USER_BY_USERNAME_QUERY, rowMapper,email);
         return user;
     }
 

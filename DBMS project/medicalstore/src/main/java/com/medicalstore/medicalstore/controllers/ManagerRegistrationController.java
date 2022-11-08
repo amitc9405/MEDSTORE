@@ -1,7 +1,5 @@
 package com.medicalstore.medicalstore.controllers;
 
-import java.text.NumberFormat.Style;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,22 +8,25 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.medicalstore.medicalstore.Service.managerService;
 import com.medicalstore.medicalstore.Service.usersService;
+import com.medicalstore.medicalstore.models.users;
 import com.medicalstore.medicalstore.web.dto.usersRegistrationdto;
 
 @Controller
-@RequestMapping("/registration")
-public class usersRegistrationController {
-    
+@RequestMapping("/manager_registration")
+public class ManagerRegistrationController {
+    @Autowired
+    private managerService managerservice;
+
     @Autowired
     private usersService usersservice;
-
     // public usersRegistrationController(usersService usersservice){
     //     super();
     //     this.usersservice=usersservice;
     // }
 
-    @ModelAttribute("user")
+    @ModelAttribute("manager")
     public usersRegistrationdto usersregistrationdto(){
         return new usersRegistrationdto();
     }
@@ -35,11 +36,11 @@ public class usersRegistrationController {
         // model.addAttribute("user", new usersRegistrationdto());
         System.out.println("in controller get.");
         
-        return "signup";
+        return "manager_signup";
     }
 
     @PostMapping
-    public String registerUserAccount(@ModelAttribute("user") usersRegistrationdto registrationdto,Model model){
+    public String registerUserAccount(@ModelAttribute("manager") usersRegistrationdto registrationdto,Model model){
         System.out.println("in controller post before userservice save");
         boolean password_error = true;
         boolean username_error = false;
@@ -62,13 +63,11 @@ public class usersRegistrationController {
             System.out.println("password error :"+password_error);
             System.out.println("email error :"+email_error);
             System.out.println("username_error :"+username_error);
-            return "signup";
+            return "manager_signup";
         }
-        usersservice.save(registrationdto);
+        users user = managerservice.save_manager(registrationdto);
         System.out.println("in controller post.");
 
-        return "redirect:/registration?success";
+        return "redirect:/manager_registration?success";
     }
-
-
 }

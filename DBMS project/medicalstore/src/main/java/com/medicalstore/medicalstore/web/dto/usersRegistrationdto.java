@@ -21,8 +21,15 @@ public class usersRegistrationdto {
     private String city;//
     private int pincode;//
     private String state;//
+    private int salary;
 
     
+    public int getSalary() {
+        return salary;
+    }
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
     public String getName() {
         return Name;
     }

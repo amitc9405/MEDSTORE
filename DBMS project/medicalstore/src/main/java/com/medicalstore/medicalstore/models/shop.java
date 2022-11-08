@@ -13,6 +13,9 @@ public class shop {
     private String s_street;
     private String shop_no;
     private int emp_id;
+    
+    public shop() {
+    }
     public int getIdshop() {
         return idshop;
     }

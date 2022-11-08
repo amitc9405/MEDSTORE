@@ -13,4 +13,5 @@ public interface usersService{
     void update_customer_address(String username, Address address);
     boolean username_exists(String username);
     boolean email_exists(String email);
+    // users save_manager(usersRegistrationdto registrationdto);
 }
